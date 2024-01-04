@@ -12,7 +12,6 @@ from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import json
-from googleapiclient.discovery import build
 import requests
 
 # Включаем логирование, чтобы не пропустить важные сообщения
@@ -22,8 +21,6 @@ bot = Bot(token=settings['token_tg'])
 # Диспетчер
 dp = Dispatcher()
 scheduler = AsyncIOScheduler()
-# Настраиваем апи гугла
-youtube = build("youtube", "v3", developerKey=settings['token_google'])
      
 # Открываем json файл с каналами
 with open("data.json", "r") as f:
@@ -110,7 +107,6 @@ async def cmd_start(message: types.Message):
             input_field_placeholder="Меню"
         )
         await message.answer("Приветствую, данный бот будет присылать тебе подкаст каждый день из твоего списка каналов(информация и настройки)", reply_markup=keyboard)
-        #await message.answer("Приветствую, данный бот будет присылать тебе подкаст каждый день из твоего списка каналов(в настройках)", reply_markup=greet_kb)
     else:
         await message.answer(f"Привет, тебя нету в вайт листе, так что ты не можешь пользоваться ботом\nТвой id для добавления в white list: {message.from_user.id}")
 
