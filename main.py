@@ -30,14 +30,13 @@ with open("data.json", "r") as f:
 # Функция на отправку видео каждый день
 
 async def send_video_every():
-    a = 0
+    a = False
     b = 0
     for vid in data:
         videos = scrapetube.get_channel(vid)
         for video in videos:
             print(video['videoId'])
             if video['videoId'] not in vid_list_al:
-                a = random.randint(1,99999999999)
                 yt = YouTube(f'https://www.youtube.com/watch?v={video["videoId"]}')
                 print(f'https://www.youtube.com/watch?v={video["videoId"]}')
                 stream = yt.streams.filter(only_audio=True).first()
@@ -45,11 +44,11 @@ async def send_video_every():
                 audio = FSInputFile(f"{yt.title}.mp3")
                 await bot.send_audio(chat_id=settings['user_wl'], audio=audio, caption=f"Держи свой подкаст под названием {yt.title}!\n{yt.watch_url}")
                 os.remove(f"{yt.title}.mp3") 
-                a = 1  
+                a = True 
                 vid_list_al[b] = video['videoId']
             break
         b+=1 
-    if a == 0:
+    if a == False:
         await bot.send_message(chat_id=settings['user_wl'], caption=f"Новых роликов не вышло")
 
 
@@ -88,7 +87,6 @@ async def dowload_without(message: types.Message):
             i = i+1
             if i == 10:
                 break
-        a = random.randint(1,99999999999)
         yt = YouTube(f'https://www.youtube.com/watch?v={random.choice(vid_list)}')
         stream = yt.streams.filter(only_audio=True).first()
         stream.download(filename=f"{yt.title}.mp3")
